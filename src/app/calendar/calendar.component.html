@@ -1,0 +1,50 @@
+<div class="center">
+  <ng-container *ngIf="loading then spinner;else calendar"></ng-container>
+
+  <ng-template #spinner>
+    <mat-spinner [diameter]="100"></mat-spinner>
+  </ng-template>
+
+  <ng-template #calendar>
+    <div class="calendar">
+      <div class="calendar__header">
+        <div class="calendar__header__day" *ngFor="let day of [].constructor(7); index as index">
+          <div>{{index | dayOfWeekName}}</div>
+        </div>
+      </div>
+
+      <div class="calendar__body">
+        <div class="calendar__cell" *ngFor="let day of currentMonth.days; index as index"
+          [ngClass]="{ 'first-day': !(index % 7), 'last-day': (index % 7 === 6), 'disabled': day.disabled, 'current': today.date() === index}">
+
+          <div class="calendar__cell__day">
+            {{day.dayNumber}}
+            <button mat-icon-button class="delete-button" color="warn" *ngIf="day.reminders.length && !day.disabled"
+              #tooltip="matTooltip" matTooltip="Remove all reminders from this day" [matTooltipPosition]="'right'"
+              (click)="removeAllDayReminders(day.date)">
+              <mat-icon [inline]="true">dangerous</mat-icon>
+            </button>
+          </div>
+
+          <div class="calendar__cell__reminders">
+            <div class="hidden-scroll">
+              <div class="calendar__cell__reminders__item" *ngFor="let reminder of day.reminders"
+                [ngClass]="{ 'disabled': day.disabled}">
+                <button mat-icon-button class="delete-button" color="warn" aria-label="Delete this reminder"
+                  *ngIf="!day.disabled" #tooltip="matTooltip" matTooltip="Remove this reminder"
+                  [matTooltipPosition]="'above'" (click)="removeSelectedReminder(reminder.id)">
+                  <mat-icon [inline]="true">remove_circle_outline</mat-icon>
+                </button>
+                {{reminder.description}}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <button mat-raised-button (click)="testWathever()">Testing</button>
+
+</div>
