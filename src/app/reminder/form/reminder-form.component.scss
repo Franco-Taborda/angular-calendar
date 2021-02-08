@@ -1,0 +1,71 @@
+.reminder {
+	width: 400px;
+	margin: 50px auto;
+	text-align: center;
+	position: relative;
+
+  &__form {
+    background: white;
+    border: 0 none;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 80%;
+    margin: 0 10%;
+
+    &__title {
+      font-size: 15px;
+      text-transform: uppercase;
+      color: #2C3E50;
+      margin-bottom: 10px;
+    }
+
+    &__label {
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: #2C3E50;
+    }
+    
+    &__input {
+      display: block;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-bottom: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      color: #2C3E50;
+    }
+
+    &__button {
+      width: 100px;
+      font-weight: bold;
+      border: 0 none;
+      border-radius: 1px;
+      cursor: pointer;
+      padding: 10px 5px;
+      margin: 10px 5px;
+    
+      &.accept {
+        background: #27AE60;
+        color: white;
+      }
+    
+      &.cancel {
+        background: white;
+        color: black;
+        border: 1px solid black;
+      }
+
+      &.color {
+        width: 90%;
+        background: white;
+        border: 2px solid black;
+        border-radius: 3px;
+      }
+    }
+  }
+
+
+}

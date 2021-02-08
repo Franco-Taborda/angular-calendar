@@ -1,0 +1,19 @@
+<div [formGroup]="reminderForm" class="reminder">
+  <div class="reminder__form">
+    <h2 class="reminder__form__title">New reminder</h2>
+
+    <input class="reminder__form__input" type="text" name="description" formControlName="description" placeholder="Description" required maxlength=30>
+    <input class="reminder__form__input" type="text" name="city" formControlName="city" placeholder="City" required>
+    <label class="reminder__form__label">
+      Time
+      <input class="reminder__form__input" type="time" name="time" formControlName="date" required>
+    </label>
+    <input type="button" class="reminder__form__button color" value="Click To Choose Color" (click)="onSubmit()"
+      [(colorPicker)]="reminderForm.value.color" [style.background-color]="reminderForm.value.color"
+      [cpSaveClickOutside]=false [cpOKButton]=true (colorPickerSelect)="onSelectColor($event)">
+
+    <input type="button" class="reminder__form__button accept" value="Accept" (click)="onSubmit()">
+    <input type="button" class="reminder__form__button cancel" value="Cancel" (click)="onNoClick()">
+  </div>
+
+</div>

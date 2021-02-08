@@ -1,15 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { take } from 'rxjs/internal/operators';
+import { ReminderFormComponent } from 'src/app/reminder/form/reminder-form.component';
 import { Reminder } from 'src/app/reminder/reminder';
-import { SubSink } from 'subsink';
-import { v4 as uuidv4 } from 'uuid';
-
-import { Day, Month } from './calendar';
+import { ReminderService } from 'src/app/reminder/reminder.service';
 import * as ReminderActions from 'src/app/reminder/store/reminder.actions';
 import * as ReminderSelectors from 'src/app/reminder/store/reminder.selectors';
-import { ReminderService } from 'src/app/reminder/reminder.service';
+import { SubSink } from 'subsink';
+
+import { Day, Month } from './calendar';
 
 @Component({
   selector: 'app-calendar',
@@ -26,6 +27,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   // calendar: Month[];
 
   constructor(
+    public dialog: MatDialog,
     private calendarService: ReminderService,
     private store: Store<{ reminders: Reminder[] }>
   ) {
@@ -149,18 +151,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  testWathever() {
-    const newReminder: Reminder = {
-      id: uuidv4(),
-      date: dayjs().toISOString(),
-      description: `${dayjs().format('mm:ss')}`,
-      city: 'Córdoba',
-      color: '#fffff0',
-    };
-
-    this.store.dispatch(ReminderActions.addReminder({ reminder: newReminder }));
-  }
-
   removeSelectedReminder(reminderId: string) {
     this.store.dispatch(ReminderActions.deleteReminder({ id: reminderId }));
   }
@@ -172,5 +162,26 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       ReminderActions.deleteRemindersByPredicate({ predicate })
     );
+  }
+
+  createReminder(day: Day): void {
+    if (!day.disabled) {
+      const dialogRef = this.dialog.open(ReminderFormComponent, {
+        data: day
+      });
+  
+      dialogRef.afterClosed().subscribe(newReminder => {
+        if (newReminder) {
+          this.store.dispatch(
+            ReminderActions.addReminder({ reminder: newReminder })
+          )
+        }
+      });
+    }
+  }
+
+  alert(message: string) {
+    
+    alert(message);
   }
 }

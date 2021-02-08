@@ -8,5 +8,5 @@ export interface Day {
   dayNumber: number; // Date of the month
   date: string;
   reminders: Reminder[];
-  disabled?: boolean;
+  disabled: boolean;
 }
