@@ -4,12 +4,12 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/internal/operators';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Reminder } from '../model/month';
+import { Reminder } from 'src/app/reminder/reminder';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CalendarService {
+export class ReminderService {
   constructor() {}
 
   fetchReminders(): Observable<Reminder[]> {

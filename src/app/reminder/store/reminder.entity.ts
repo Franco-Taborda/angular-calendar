@@ -1,7 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import * as dayjs from 'dayjs';
-
-import { Reminder } from './model/month';
+import { Reminder } from 'src/app/reminder/reminder';
 
 export interface State extends EntityState<Reminder> {
   selectedReminderId: number | null;

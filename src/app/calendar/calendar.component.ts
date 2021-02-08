@@ -2,13 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { take } from 'rxjs/internal/operators';
+import { Reminder } from 'src/app/reminder/reminder';
 import { SubSink } from 'subsink';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Day, Month, Reminder } from './model/month';
-import * as ReminderActions from './reminder.actions';
-import * as ReminderSelectors from './reminder.selectors';
-import { CalendarService } from './services/calendar.service';
+import { Day, Month } from './calendar';
+import * as ReminderActions from 'src/app/reminder/store/reminder.actions';
+import * as ReminderSelectors from 'src/app/reminder/store/reminder.selectors';
+import { ReminderService } from 'src/app/reminder/reminder.service';
 
 @Component({
   selector: 'app-calendar',
@@ -25,7 +26,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   // calendar: Month[];
 
   constructor(
-    private calendarService: CalendarService,
+    private calendarService: ReminderService,
     private store: Store<{ reminders: Reminder[] }>
   ) {
     this.initializeCalendar();

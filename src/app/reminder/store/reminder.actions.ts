@@ -1,7 +1,7 @@
 import { Predicate, Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 
-import { Reminder } from './model/month';
+import { Reminder } from 'src/app/reminder/reminder';
 
 export const loadReminders = createAction(
   '[Reminder/API] Load Reminders',

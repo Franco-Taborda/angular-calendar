@@ -1,7 +1,7 @@
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 
-import { Reminder } from './model/month';
+import { Reminder } from 'src/app/reminder/reminder';
 import * as ReminderEntity from './reminder.entity';
 import * as fromReminder from './reminder.reducer';
 
