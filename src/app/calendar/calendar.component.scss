@@ -97,6 +97,9 @@ $remove-icon-size: 1.15rem;
         .create-button {
           padding-left: 3px;
           color: green;
+          &.mat-icon-button {
+            font-weight: bold;
+          }
         }
       }
 

@@ -24,8 +24,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
   loading: boolean;
   today = dayjs();
 
-  // calendar: Month[];
-
   constructor(
     public dialog: MatDialog,
     private calendarService: ReminderService,
@@ -63,15 +61,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   private initializeCalendar() {
     const firstMonthDay = dayjs().startOf('month').hour(0).minute(0).second(0);
-    const [currentMonth, previousMonth, nextMonth] = [
-      this.buildMonth(firstMonthDay),
-      this.buildMonth(firstMonthDay.subtract(1, 'month')),
-      this.buildMonth(firstMonthDay.add(1, 'month')),
-    ];
-
-    this.currentMonth = currentMonth;
-
-    // this.calendar = [currentMonth, previousMonth, nextMonth];
+    this.currentMonth = this.buildMonth(firstMonthDay);
   }
 
   private buildMonth(monthDate: dayjs.Dayjs) {
@@ -166,8 +156,20 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   createReminder(day: Day): void {
     if (!day.disabled) {
+      const reminder: Reminder = {
+        id: '',
+        date: day.date,
+        description: '',
+        city: '',
+        color: '',
+      }
+
       const dialogRef = this.dialog.open(ReminderFormComponent, {
-        data: day
+        data: {
+          reminder,
+          isEdition: false,
+          displayOnly: false
+        }
       });
   
       dialogRef.afterClosed().subscribe(newReminder => {
@@ -180,8 +182,32 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
   }
 
-  alert(message: string) {
-    
-    alert(message);
+  editReminder(reminder: Reminder): void {
+    const dialogRef = this.dialog.open(ReminderFormComponent, {
+      data: { 
+        reminder,
+        isEdition: true,
+        displayOnly: false
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(editedReminder => {
+      if (editedReminder) {
+        this.store.dispatch(
+          ReminderActions.updateReminder({ update: { id: editedReminder.id, changes: editedReminder } })
+        );
+      }
+    });
   }
+
+  displayReminder(reminder: Reminder) {
+    this.dialog.open(ReminderFormComponent, {
+      data: { 
+        reminder,
+        isEdition: false,
+        displayOnly: true
+      }
+    });
+  }
+
 }

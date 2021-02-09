@@ -1,19 +1,58 @@
-<div [formGroup]="reminderForm" class="reminder">
+<div [formGroup]="reminderForm" class="reminder" [ngClass]="{ 'split': isEdition || displayOnly }">
   <div class="reminder__form">
-    <h2 class="reminder__form__title">New reminder</h2>
+    <button mat-icon-button class="reminder__form__button--exit" (click)="onNoClick()">
+      <mat-icon [inline]="true">clear</mat-icon>
+    </button>
+    <h2 class="reminder__form__title">{{ title }}</h2>
 
-    <input class="reminder__form__input" type="text" name="description" formControlName="description" placeholder="Description" required maxlength=30>
+    <input class="reminder__form__input" type="text" name="description" formControlName="description"
+      placeholder="Description" required maxlength=30>
     <input class="reminder__form__input" type="text" name="city" formControlName="city" placeholder="City" required>
+
+    <label class="reminder__form__label" *ngIf="isEdition || displayOnly">
+      Date
+      <input class="reminder__form__input" type="date" name="date" formControlName="selectedDay" required>
+    </label>
+
     <label class="reminder__form__label">
       Time
       <input class="reminder__form__input" type="time" name="time" formControlName="date" required>
     </label>
-    <input type="button" class="reminder__form__button color" value="Click To Choose Color" (click)="onSubmit()"
-      [(colorPicker)]="reminderForm.value.color" [style.background-color]="reminderForm.value.color"
-      [cpSaveClickOutside]=false [cpOKButton]=true (colorPickerSelect)="onSelectColor($event)">
 
-    <input type="button" class="reminder__form__button accept" value="Accept" (click)="onSubmit()">
-    <input type="button" class="reminder__form__button cancel" value="Cancel" (click)="onNoClick()">
+    <label class="reminder__form__label">
+      Color
+      <input type="button" class="reminder__form__button color" value="Click To Choose Color"
+        [(colorPicker)]="reminderForm.value.color" [style.background-color]="reminderForm.value.color"
+        [cpSaveClickOutside]=false [cpOKButton]=true (colorPickerSelect)="onSelectColor($event)" [disabled]="displayOnly">
+      </label>
+
+      <div *ngIf="!displayOnly">
+        <input type="button" class="reminder__form__button accept" value="Accept"
+          (click)="isEdition ? onSubmitEdit() : onSubmitCreate()">
+        <input type="button" class="reminder__form__button cancel" value="Cancel" (click)="onNoClick()">
+      </div>
+  </div>
+
+  <div *ngIf="isEdition || displayOnly" class="reminder__weather">
+    <ng-container *ngIf="weatherLoading then spinner; else weatherInfo"></ng-container>
+
+    <ng-template #spinner><mat-spinner [diameter]="20"></mat-spinner></ng-template>
+
+    <ng-template #weatherInfo>
+      <ng-container *ngIf="weatherError then error; else info"></ng-container>
+
+      <ng-template #error>
+        <div class="reminder__weather__error">{{ weatherError }}</div>
+      </ng-template>
+
+      <ng-template #info>
+        <div class="reminder__weather__item title">{{ weather.temp }} °C</div>
+        <div class="reminder__weather__item"><mat-icon [inline]=true>cloud_queue</mat-icon> {{ weather.clouds }}</div>
+        <div class="reminder__weather__item" *ngIf="weather.visibility"><mat-icon [inline]=true>remove_red_eye</mat-icon> {{ weather.visibility / 1000}}km</div>
+        <div class="reminder__weather__item">RH {{ weather.humidity }}%</div>
+      </ng-template>
+    </ng-template>
+
   </div>
 
 </div>

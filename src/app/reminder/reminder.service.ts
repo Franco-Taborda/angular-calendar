@@ -76,7 +76,7 @@ export class ReminderService {
       },
       {
         id: uuidv4(),
-        date: dayjs('2021-03-01T03:00:00.000Z').toISOString(),
+        date: dayjs('2021-03-01T17:34:00.000Z').toISOString(),
         description: "Next month's first event!",
         city: 'Córdoba',
         color: '#ff0000',

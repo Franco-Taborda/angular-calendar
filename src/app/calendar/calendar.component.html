@@ -1,6 +1,5 @@
 <div class="center">
   <ng-container *ngIf="loading then spinner;else calendar"></ng-container>
-
   <ng-template #spinner>
     <mat-spinner [diameter]="100"></mat-spinner>
   </ng-template>
@@ -21,6 +20,7 @@
             <div>{{day.dayNumber}}</div>
             <div class="calendar__cell__day__controls">
               <button mat-icon-button class="create-button" #tooltip="matTooltip" matTooltip="Create a new reminder"
+                *ngIf="!day.disabled"
                 [matTooltipPosition]="'right'" (click)="createReminder(day)">
                 <mat-icon [inline]="true">alarm_add</mat-icon>
               </button>
@@ -35,7 +35,7 @@
           <div class="calendar__cell__reminders">
             <div class="hidden-scroll">
               <div class="calendar__cell__reminders__item" *ngFor="let reminder of day.reminders"
-                [ngClass]="{ 'disabled': day.disabled }" (click)="alert('Feature not available')"
+                [ngClass]="{ 'disabled': day.disabled }" (click)="day.disabled ? displayReminder(reminder) : editReminder(reminder)"
                 [style.border-color]="reminder.color || '#2F74B5'">
                 <button mat-icon-button class="delete-button" color="warn" aria-label="Delete this reminder"
                   *ngIf="!day.disabled" #tooltip="matTooltip" matTooltip="Remove this reminder"

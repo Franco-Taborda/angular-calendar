@@ -1,30 +1,45 @@
+$close-icon-size: 1.2rem;
+$form-main-color: #2C3E50;
+
 .reminder {
-	width: 400px;
-	margin: 50px auto;
+  width: 320px;
 	text-align: center;
-	position: relative;
+
+  &.split {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-areas: 
+      ". form weather"
+      ". form weather"
+      ". form ."
+      ". form ."
+      ". form ."
+      ". form .";
+    width: 480px;
+  }
 
   &__form {
+    grid-area: form;
+    position: relative;
     background: white;
-    border: 0 none;
     border-radius: 3px;
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     padding: 20px 30px;
     box-sizing: border-box;
-    width: 80%;
-    margin: 0 10%;
 
     &__title {
       font-size: 15px;
       text-transform: uppercase;
-      color: #2C3E50;
+      color: $form-main-color;
       margin-bottom: 10px;
+      cursor: default;
     }
 
     &__label {
       font-size: 1rem;
       text-transform: uppercase;
-      color: #2C3E50;
+      color: $form-main-color;
     }
     
     &__input {
@@ -35,7 +50,7 @@
       margin-bottom: 10px;
       width: 100%;
       box-sizing: border-box;
-      color: #2C3E50;
+      color: $form-main-color;
     }
 
     &__button {
@@ -46,6 +61,20 @@
       cursor: pointer;
       padding: 10px 5px;
       margin: 10px 5px;
+
+      &--exit {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: black;
+
+        &.mat-icon-button {
+          height: $close-icon-size;
+          width: $close-icon-size;
+          font-size: $close-icon-size;
+          line-height: 1rem;
+        }
+      }
     
       &.accept {
         background: #27AE60;
@@ -63,9 +92,43 @@
         background: white;
         border: 2px solid black;
         border-radius: 3px;
+
+        &:disabled {
+          border-color: lightgray;
+          cursor: default;
+        }
       }
     }
   }
 
+  &__weather {
+    grid-area: weather;
+    padding: 10px;
+    background-color: whitesmoke;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    text-align: left;
+
+    &__item {
+      color: $form-main-color;
+      font-weight: normal;
+      margin-top: 10px;
+      cursor: default;
+
+      &.title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-top: 0;
+      }
+
+      .mat-icon {
+        font-weight: bold;
+      }
+    }
+
+    &__error {
+      color: red;
+    }
+  }
 
 }
