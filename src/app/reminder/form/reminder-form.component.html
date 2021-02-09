@@ -21,15 +21,15 @@
 
     <label class="reminder__form__label">
       Color
-      <input type="button" class="reminder__form__button color" value="Click To Choose Color"
+      <button type="button" class="reminder__form__button color"
         [(colorPicker)]="reminderForm.value.color" [style.background-color]="reminderForm.value.color"
-        [cpSaveClickOutside]=false [cpOKButton]=true (colorPickerSelect)="onSelectColor($event)" [disabled]="displayOnly">
+        [cpSaveClickOutside]=false [cpOKButton]=true (colorPickerSelect)="onSelectColor($event)" [disabled]="displayOnly">Click To Choose Color</button>
       </label>
 
       <div *ngIf="!displayOnly">
-        <input type="button" class="reminder__form__button accept" value="Accept"
-          (click)="isEdition ? onSubmitEdit() : onSubmitCreate()">
-        <input type="button" class="reminder__form__button cancel" value="Cancel" (click)="onNoClick()">
+        <button type="button" class="reminder__form__button accept"
+          (click)="isEdition ? onSubmitEdit() : onSubmitCreate()">Accept</button>
+        <button type="button" class="reminder__form__button cancel" (click)="onNoClick()">Cancel</button>
       </div>
   </div>
 

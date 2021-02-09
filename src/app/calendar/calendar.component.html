@@ -19,7 +19,7 @@
           <div class="calendar__cell__day">
             <div>{{day.dayNumber}}</div>
             <div class="calendar__cell__day__controls">
-              <button mat-icon-button class="create-button" #tooltip="matTooltip" matTooltip="Create a new reminder"
+              <button mat-icon-button class="create-button" name="create-button" #tooltip="matTooltip" matTooltip="Create a new reminder"
                 *ngIf="!day.disabled"
                 [matTooltipPosition]="'right'" (click)="createReminder(day)">
                 <mat-icon [inline]="true">alarm_add</mat-icon>

@@ -44,3 +44,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# e2e Files
+/e2e/reports
+/e2e/logs
+/e2e/.gauge

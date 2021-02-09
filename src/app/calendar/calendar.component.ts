@@ -2,10 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { take } from 'rxjs/internal/operators';
 import { ReminderFormComponent } from 'src/app/reminder/form/reminder-form.component';
 import { Reminder } from 'src/app/reminder/reminder';
-import { ReminderService } from 'src/app/reminder/reminder.service';
 import * as ReminderActions from 'src/app/reminder/store/reminder.actions';
 import * as ReminderSelectors from 'src/app/reminder/store/reminder.selectors';
 import { SubSink } from 'subsink';
@@ -26,7 +24,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialog: MatDialog,
-    private calendarService: ReminderService,
     private store: Store<{ reminders: Reminder[] }>
   ) {
     this.initializeCalendar();
@@ -41,24 +38,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit(): void {
-    this.loading = true;
-
-    this.calendarService
-      .fetchReminders()
-      .pipe(take(1))
-      .subscribe((result: Reminder[]) => {
-        this.store.dispatch(
-          ReminderActions.loadReminders({ reminders: result })
-        );
-        this.loading = false;
-      });
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
+  // Builds the current month's structure
   private initializeCalendar() {
     const firstMonthDay = dayjs().startOf('month').hour(0).minute(0).second(0);
     this.currentMonth = this.buildMonth(firstMonthDay);
@@ -96,6 +82,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return newMonth;
   }
 
+  /**
+   * Returns the Day object for the current date
+   * @param date date of month
+   * @param disabled true if the date is outside of the current month
+   */
   buildDay(date: dayjs.Dayjs, disabled = false): Day {
     const day: Day = {
       dayNumber: date.date(),
@@ -113,7 +104,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
    * @param date string used to build a date
    * @param query unit to query. It must be type accepted by dayjs
    */
-  private filterByDate(
+   filterByDate (
     reminderArr: Reminder[],
     date: string,
     query: any
@@ -123,6 +114,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Sets the reminders on each visible day
   private setReminders() {
     this.currentMonth.days.forEach((day: Day) => {
       const currentDayReminders = this.filterByDate(
@@ -141,10 +133,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Removes a single reminder
   removeSelectedReminder(reminderId: string) {
     this.store.dispatch(ReminderActions.deleteReminder({ id: reminderId }));
   }
 
+  // Removes all reminders in a day
   removeAllDayReminders(day: string) {
     const predicate = (reminder: Reminder) =>
       dayjs(reminder.date).isSame(day, 'day');
@@ -154,6 +148,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Creates a reminder for a selected day and time
+   * @param day day in which to place the reminder
+   */
   createReminder(day: Day): void {
     if (!day.disabled) {
       const reminder: Reminder = {
@@ -162,52 +160,61 @@ export class CalendarComponent implements OnInit, OnDestroy {
         description: '',
         city: '',
         color: '',
-      }
+      };
 
       const dialogRef = this.dialog.open(ReminderFormComponent, {
         data: {
           reminder,
           isEdition: false,
-          displayOnly: false
-        }
+          displayOnly: false,
+        },
       });
-  
-      dialogRef.afterClosed().subscribe(newReminder => {
+
+      dialogRef.afterClosed().subscribe((newReminder) => {
         if (newReminder) {
           this.store.dispatch(
             ReminderActions.addReminder({ reminder: newReminder })
-          )
+          );
         }
       });
     }
   }
 
+  /**
+   * Updates a selected reminder with user entered description, date, time, city and color
+   * @param reminder Reminder to edit
+   */
   editReminder(reminder: Reminder): void {
     const dialogRef = this.dialog.open(ReminderFormComponent, {
-      data: { 
+      data: {
         reminder,
         isEdition: true,
-        displayOnly: false
-      }
+        displayOnly: false,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(editedReminder => {
+    dialogRef.afterClosed().subscribe((editedReminder) => {
       if (editedReminder) {
         this.store.dispatch(
-          ReminderActions.updateReminder({ update: { id: editedReminder.id, changes: editedReminder } })
+          ReminderActions.updateReminder({
+            update: { id: editedReminder.id, changes: editedReminder },
+          })
         );
       }
     });
   }
 
+  /**
+   * Displays a reminder (read only). Made for out of the current month's reminders
+   * @param reminder Reminder to display
+   */
   displayReminder(reminder: Reminder) {
     this.dialog.open(ReminderFormComponent, {
-      data: { 
+      data: {
         reminder,
         isEdition: false,
-        displayOnly: true
-      }
+        displayOnly: true,
+      },
     });
   }
-
 }
