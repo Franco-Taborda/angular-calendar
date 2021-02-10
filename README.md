@@ -1,6 +1,6 @@
 # AngularCalendar
 
-Angular Calendar is a basic calendar application for the current month. You can add, edit and remove reminders
+Angular Calendar is a basic calendar application for the current month. You can add, edit and remove reminders. When clicking the event, the weather will show up but only for a small range of days, otherwise an error message will appear. 
 
 # Installation
 
@@ -8,7 +8,8 @@ Run `npm i` in the projects's root folder
 
 ## Running app
 
-Run `npm start`
+- Run `npm start`
+- Open the browser on `http://localhost:4200`
 
 ## Usage
 
